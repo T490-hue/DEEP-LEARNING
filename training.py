@@ -79,19 +79,41 @@ def train_epoch(model,train_loader,criterion,optimizer,device):
     return running_loss/len(train_loader)
 
 
-def evaluate(model,test_loader,device):
-    all_preds=[]
-    all_labels=[]
+# def evaluate(model,test_loader,device):
+#     all_preds=[]
+#     all_labels=[]
 
-    for images,labels in test_loader:
-        images,labels=images.to(device),labels.to(device)
-        output=model(images)
-        _,predicted=torch.max(output,1)
+#     for images,labels in test_loader:
+#         images,labels=images.to(device),labels.to(device)
+#         output=model(images)
+#         _,predicted=torch.max(output,1)
+# #     output: A tensor representing the raw scores (logits) produced by the model for each class. It usually has a shape of [batch_size, num_classes].
 
-        all_preds.extend(predicted.cpu().numpy())
-        all_labels.extend(labels.cpu().numpy())
+# #     Each row corresponds to a single data point.
+# #     Each column corresponds to the score for a specific class.
 
-    return accuracy_score(all_preds,all_labels),all_preds,all_labels
+# # dim=1: Computes the maximum along the second dimension (i.e., across the classes for each sample in the batch). 
+#         all_preds.extend(predicted.cpu().numpy())
+#         all_labels.extend(labels.cpu().numpy())
+
+#     return accuracy_score(all_preds,all_labels),all_preds,
+    
+
+def evaluate(model, test_loader, device):
+    model.eval()
+    all_preds = []
+    all_labels = []
+    
+    with torch.no_grad():
+        for images, labels in test_loader:
+            images, labels = images.to(device), labels.to(device)
+            output = model(images)
+            _, predicted = torch.max(output, 1)
+            all_preds.extend(predicted.cpu().numpy())
+            all_labels.extend(labels.cpu().numpy())
+    
+    model.train()  # Reset to training mode
+    return accuracy_score(all_preds, all_labels), all_preds, all_labels
 def main():
 
 
@@ -108,8 +130,8 @@ def main():
         
     ])
 
-    train_dataset=BrainTumorDataset(root_dir='/home/teena/Documents/BrainTumour_CNN/Resized_Dataset/Training',transform=transform)
-    test_dataset=BrainTumorDataset(root_dir='/home/teena/Documents/BrainTumour_CNN/Resized_Dataset/Testing',transform=transform)
+    train_dataset=BrainTumorDataset(root_dir='BrainTumour_ResizedDataset/Training',transform=transform)
+    test_dataset=BrainTumorDataset(root_dir='BrainTumour_ResizedDataset/Testing',transform=transform)
 
 
     train_loader=DataLoader(train_dataset,batch_size=32,shuffle=True)
@@ -130,7 +152,7 @@ def main():
 
         if (accuracy>best_accuracy):
             best_accuracy=accuracy
-            torch.save(model.state_dict(),'best_model.pth')
+            torch.save(model.state_dict(),'best_model.pth')                                                                                                                             
 
     model.load_state_dict(torch.load('best_model.pth'))
     final_accuracy,final_preds,final_labels=evaluate(model,test_loader,device)
