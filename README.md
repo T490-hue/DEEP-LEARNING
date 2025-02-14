@@ -65,16 +65,16 @@ pip install torch torchvision scikit-learn numpy pillow
 ```
 
 ## Usage
+
+###To perform preprocessing of images
+Run the following command:
+python3 opencv_imagepreprocessing.py
 ### Training the Model
 Run the following command to train the model:
 ```sh
-python main.py
+python3 training.py
 ```
 
-### Model Evaluation
-The trained model is saved as `best_model.pth`. To evaluate the model:
-```sh
-python main.py
 ```
 It prints the test accuracy and classification report.
 
