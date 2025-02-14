@@ -53,12 +53,6 @@ Ensure you have the following installed:
 - PIL (Pillow)
 - NumPy
 
-### Clone the Repository
-```sh
-git clone https://github.com/YOUR_GITHUB_LINK.git
-cd Brain-Tumor-Detection
-```
-
 ### Install Dependencies
 ```sh
 pip install torch torchvision scikit-learn numpy pillow
