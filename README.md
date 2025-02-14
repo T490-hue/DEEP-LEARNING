@@ -69,8 +69,6 @@ Run the following command to train the model:
 python3 training.py
 ```
 
-```
-It prints the test accuracy and classification report.
 
 ## Results
 - **Best Test Accuracy:** 96%
